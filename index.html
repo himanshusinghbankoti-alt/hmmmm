@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>For Kitttuuu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#150B2B;
+    --night-2:#221041;
+    --blush:#F3A9BC;
+    --rose:#E04B74;
+    --rose-deep:#B22D53;
+    --cream:#FFF2E7;
+    --gold:#F2C46B;
+    --hand:'Caveat', 'Segoe Script', cursive;
+    --body:'Karla', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html,body{height:100%;}
+
+  body{
+    font-family:var(--body);
+    color:var(--cream);
+    background:
+      radial-gradient(120% 80% at 50% 0%, #3A1A55 0%, rgba(58,26,85,0) 60%),
+      radial-gradient(90% 70% at 80% 100%, #4A1740 0%, rgba(74,23,64,0) 55%),
+      var(--night);
+    min-height:100dvh;
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  /* ---------- stage system ---------- */
+  .stage{
+    position:fixed;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px 22px;
+    text-align:center;
+    z-index:2;
+  }
+  .stage.on{display:flex;}
+
+  .wrap{width:100%;max-width:440px;}
+
+  /* ---------- gate ---------- */
+  .lock{
+    font-size:38px;
+    line-height:1;
+    margin-bottom:18px;
+    display:inline-block;
+  }
+  .gate-title{
+    font-family:var(--hand);
+    font-size:clamp(38px,11vw,54px);
+    font-weight:700;
+    line-height:1.05;
+    color:var(--cream);
+  }
+  .gate-sub{
+    font-size:14.5px;
+    line-height:1.6;
+    color:#C9B6DE;
+    margin-top:10px;
+  }
+
+  form{margin-top:26px;}
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  input[type="password"]{
+    width:100%;
+    font-family:var(--body);
+    font-size:17px;
+    letter-spacing:.24em;
+    text-align:center;
+    color:var(--cream);
+    background:rgba(255,242,231,.06);
+    border:1.5px solid rgba(243,169,188,.35);
+    border-radius:14px;
+    padding:16px 18px;
+    outline:none;
+    transition:border-color .2s, background .2s;
+  }
+  input[type="password"]::placeholder{color:#8E7BA6;letter-spacing:.1em;}
+  input[type="password"]:focus{
+    border-color:var(--blush);
+    background:rgba(255,242,231,.1);
+  }
+
+  .btn{
+    font-family:var(--body);
+    font-size:16px;
+    font-weight:700;
+    color:#3A0A1E;
+    background:var(--blush);
+    border:none;
+    border-radius:14px;
+    padding:16px 22px;
+    cursor:pointer;
+    transition:transform .12s ease, background .2s;
+  }
+  .btn:hover{background:#F7BECD;}
+  .btn:active{transform:scale(.97);}
+
+  .btn-ghost{
+    background:transparent;
+    color:var(--blush);
+    border:1.5px solid rgba(243,169,188,.4);
+  }
+  .btn-ghost:hover{background:rgba(243,169,188,.12);}
+
+  :focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+
+  .error{
+    margin-top:14px;
+    font-size:14px;
+    color:var(--blush);
+    min-height:20px;
+    opacity:0;
+    transition:opacity .2s;
+  }
+  .error.show{opacity:1;}
+
+  .shake{animation:shake .4s;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-9px);}
+    40%{transform:translateX(9px);}
+    60%{transform:translateX(-6px);}
+    80%{transform:translateX(6px);}
+  }
+
+  /* ---------- sorry card ---------- */
+  .card{
+    background:linear-gradient(170deg, rgba(255,242,231,.1), rgba(255,242,231,.04));
+    border:1.5px solid rgba(243,169,188,.3);
+    border-radius:26px;
+    padding:34px 26px 30px;
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    animation:pop .5s cubic-bezier(.2,1.3,.4,1) both;
+  }
+  @keyframes pop{
+    from{opacity:0;transform:scale(.88) translateY(14px);}
+    to{opacity:1;transform:scale(1) translateY(0);}
+  }
+
+  .emoji-row{
+    font-size:30px;
+    letter-spacing:6px;
+    margin-bottom:14px;
+  }
+
+  .sorry-word{
+    font-family:var(--hand);
+    font-size:clamp(64px,20vw,92px);
+    font-weight:700;
+    line-height:.9;
+    color:var(--blush);
+    text-shadow:0 6px 30px rgba(224,75,116,.45);
+  }
+
+  .card p{
+    font-size:15.5px;
+    line-height:1.75;
+    color:#EBDCF0;
+    margin-top:18px;
+  }
+
+  .card .btn{margin-top:26px;width:100%;}
+
+  /* ---------- question ---------- */
+  .q-title{
+    font-family:var(--hand);
+    font-size:clamp(40px,12vw,58px);
+    font-weight:700;
+    line-height:1.1;
+    color:var(--cream);
+  }
+  .nudge{
+    margin-top:16px;
+    font-size:15px;
+    line-height:1.6;
+    color:var(--gold);
+    min-height:48px;
+  }
+
+  .buttons{
+    margin-top:30px;
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  #yesBtn{
+    background:var(--rose);
+    color:#FFF2E7;
+    padding:16px 34px;
+    border-radius:16px;
+    font-size:17px;
+    box-shadow:0 10px 30px rgba(224,75,116,.35);
+    transition:transform .25s cubic-bezier(.2,1.3,.4,1), background .2s;
+  }
+  #yesBtn:hover{background:#EC5C84;}
+
+  #noBtn{
+    background:transparent;
+    color:var(--blush);
+    border:1.5px solid rgba(243,169,188,.45);
+    padding:16px 34px;
+    border-radius:16px;
+    font-size:17px;
+    z-index:20;
+    touch-action:none;
+  }
+  #noBtn.loose{
+    position:fixed;
+    margin:0;
+    transition:left .18s ease, top .18s ease;
+  }
+
+  /* ---------- love ---------- */
+  .love-hand{
+    font-family:var(--hand);
+    font-size:clamp(56px,17vw,82px);
+    font-weight:700;
+    line-height:1;
+    color:var(--blush);
+  }
+  .love-name{
+    font-family:var(--hand);
+    font-size:clamp(46px,14vw,68px);
+    font-weight:700;
+    color:var(--gold);
+    line-height:1.1;
+    margin-top:2px;
+  }
+  .love-note{
+    font-size:15.5px;
+    line-height:1.8;
+    color:#EBDCF0;
+    margin-top:22px;
+  }
+  .beat{display:inline-block;animation:beat 1.1s ease-in-out infinite;}
+  @keyframes beat{
+    0%,100%{transform:scale(1);}
+    25%{transform:scale(1.18);}
+    50%{transform:scale(1);}
+  }
+
+  /* ---------- floating hearts ---------- */
+  #sky{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:1;
+  }
+  .float{
+    position:absolute;
+    bottom:-60px;
+    font-size:22px;
+    opacity:0;
+    animation:rise linear forwards;
+    will-change:transform,opacity;
+  }
+  @keyframes rise{
+    0%{opacity:0;transform:translateY(0) rotate(0deg) scale(.7);}
+    12%{opacity:.95;}
+    80%{opacity:.85;}
+    100%{opacity:0;transform:translateY(-112dvh) rotate(var(--spin)) scale(1.15);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .float{display:none;}
+    .beat,.card{animation:none;}
+    #noBtn.loose{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="sky" aria-hidden="true"></div>
+
+<!-- 1. password gate -->
+<section class="stage on" id="gate">
+  <div class="wrap" id="gateBox">
+    <span class="lock">🔐</span>
+    <h1 class="gate-title">Ruko zara</h1>
+    <p class="gate-sub">Ye page sirf ek insaan ke liye hai.<br>Password daalo andar aane ke liye.</p>
+    <form id="gateForm" autocomplete="off">
+      <div class="field">
+        <input type="password" id="pass" placeholder="password" aria-label="Password" autocomplete="off">
+        <button type="submit" class="btn">Kholo</button>
+      </div>
+    </form>
+    <p class="error" id="err">Galat password. Ek baar aur soch ke dekho 🙂</p>
+  </div>
+</section>
+
+<!-- 2. sorry -->
+<section class="stage" id="sorry">
+  <div class="wrap">
+    <div class="card">
+      <div class="emoji-row">🥺 💔 🌹 💌 🫶</div>
+      <div class="sorry-word">Sorry</div>
+      <p>Mujhe pata hai maine tumhara dil dukhaya. Koi bahana nahi hai mere paas — bas itna hai ki tu meri duniya hai, aur tujhe udaas dekhna mujhse nahi hota. 💗</p>
+      <button class="btn" id="toQuestion">Ek baat poochni hai, ummmmm 🥺</button>
+    </div>
+  </div>
+</section>
+
+<!-- 3. question -->
+<section class="stage" id="question">
+  <div class="wrap">
+    <div class="emoji-row">💐</div>
+    <h2 class="q-title">Kya aapne mujhe maaf kia?</h2>
+    <p class="nudge" id="nudge">Chalo, <strong>No</strong> pe click karke dekho 👀</p>
+    <div class="buttons">
+      <button class="btn" id="yesBtn">Yes 💖</button>
+      <button class="btn" id="noBtn">No</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4. love -->
+<section class="stage" id="love">
+  <div class="wrap">
+    <div class="emoji-row">🎉 🥰 🎊</div>
+    <div class="love-hand">I love you,</div>
+    <div class="love-name">Kitttuuu (Ameeshuuu)</div>
+    <div style="font-size:44px;margin-top:14px;"><span class="beat">❤️</span></div>
+    <p class="love-note">Thank you maaf karne ke liye. I Promise — ab se tumhara ye bandar tumhe pareshan nahi krega. 🤍<br>Tum meri favourite bandariya ho (he he he he), aaj bhi, kal bhi, hamesha.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  "use strict";
+
+  var PASSWORD = "himisha";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- stage switching ---------- */
+  function show(id){
+    var all = document.querySelectorAll(".stage");
+    for (var i = 0; i < all.length; i++) all[i].classList.remove("on");
+    document.getElementById(id).classList.add("on");
+  }
+
+  /* ---------- floating hearts ---------- */
+  var sky = document.getElementById("sky");
+  var SET = ["❤️","💖","💕","🌹","💗","💘","🫶","✨","💓"];
+  var raining = false;
+
+  function heart(){
+    if (reduce) return;
+    var el = document.createElement("span");
+    el.className = "float";
+    el.textContent = SET[Math.floor(Math.random() * SET.length)];
+    el.style.left = (Math.random() * 96) + "vw";
+    el.style.fontSize = (16 + Math.random() * 22) + "px";
+    var dur = 6 + Math.random() * 5;
+    el.style.animationDuration = dur + "s";
+    el.style.setProperty("--spin", (Math.random() * 90 - 45) + "deg");
+    sky.appendChild(el);
+    setTimeout(function(){ el.remove(); }, dur * 1000 + 200);
+  }
+
+  function startRain(){
+    if (raining || reduce) return;
+    raining = true;
+    for (var i = 0; i < 8; i++) setTimeout(heart, i * 160);
+    setInterval(heart, 420);
+  }
+
+  function burst(n){
+    if (reduce) return;
+    for (var i = 0; i < n; i++) setTimeout(heart, i * 55);
+  }
+
+  /* ---------- 1. gate ---------- */
+  var form = document.getElementById("gateForm");
+  var pass = document.getElementById("pass");
+  var err  = document.getElementById("err");
+  var box  = document.getElementById("gateBox");
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (pass.value.trim().toLowerCase() === PASSWORD){
+      err.classList.remove("show");
+      startRain();
+      burst(14);
+      show("sorry");
+    } else {
+      err.classList.add("show");
+      box.classList.remove("shake");
+      void box.offsetWidth;
+      box.classList.add("shake");
+      pass.value = "";
+      pass.focus();
+    }
+  });
+
+  /* ---------- 2. sorry -> question ---------- */
+  document.getElementById("toQuestion").addEventListener("click", function(){
+    show("question");
+  });
+
+  /* ---------- 3. the runaway No button ---------- */
+  var noBtn  = document.getElementById("noBtn");
+  var yesBtn = document.getElementById("yesBtn");
+  var nudge  = document.getElementById("nudge");
+  var dodges = 0;
+
+  var LINES = [
+    "Arre! Miss ho gaya 🙈 fir se <strong>No</strong> try karo",
+    "Itna slow? <strong>No</strong> abhi bhi wahi hai 😌",
+    "Ye button tumse darta hai 😭 aur ek baar <strong>No</strong> dabao",
+    "Pakka nahi pakdoge... try again 👻",
+    "<strong>No</strong> ne resign de diya hai 📄",
+    "Dekho, Yes kitna bada ho raha hai 👀",
+    "Thak gaye? Yes wala button intezaar kar raha hai 🥺",
+    "Universe bhi chahta hai tum Yes dabao ✨"
+  ];
+
+  function jump(){
+    dodges++;
+
+    var pad  = 12;
+    var rect = noBtn.getBoundingClientRect();
+    var w    = rect.width;
+    var h    = rect.height;
+
+    if (!noBtn.classList.contains("loose")){
+      noBtn.classList.add("loose");
+      noBtn.style.width = w + "px";
+      noBtn.style.height = h + "px";
+    }
+
+    var maxX = Math.max(pad, window.innerWidth  - w - pad);
+    var maxY = Math.max(pad, window.innerHeight - h - pad);
+
+    var x, y, tries = 0;
+    do {
+      x = pad + Math.random() * (maxX - pad);
+      y = pad + Math.random() * (maxY - pad);
+      tries++;
+    } while (tries < 20 && Math.abs(x - rect.left) < 90 && Math.abs(y - rect.top) < 90);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top  = y + "px";
+
+    nudge.innerHTML = LINES[(dodges - 1) % LINES.length];
+
+    var grow = Math.min(1 + dodges * 0.12, 2.1);
+    yesBtn.style.transform = "scale(" + grow + ")";
+
+    burst(2);
+  }
+
+  // mouse
+  noBtn.addEventListener("mouseenter", jump);
+  noBtn.addEventListener("mouseover", jump);
+
+  // touch / pen / mobile — move it before the tap can land
+  noBtn.addEventListener("pointerdown", function(e){ e.preventDefault(); jump(); });
+  noBtn.addEventListener("touchstart",  function(e){ e.preventDefault(); jump(); }, {passive:false});
+
+  // last line of defence
+  noBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    jump();
+  });
+
+  /* ---------- 4. yes ---------- */
+  yesBtn.addEventListener("click", function(){
+    show("love");
+    startRain();
+    burst(30);
+    setTimeout(function(){ burst(24); }, 700);
+  });
+
+  window.addEventListener("resize", function(){
+    if (!noBtn.classList.contains("loose")) return;
+    var pad = 12;
+    var r = noBtn.getBoundingClientRect();
+    var maxX = Math.max(pad, window.innerWidth  - r.width  - pad);
+    var maxY = Math.max(pad, window.innerHeight - r.height - pad);
+    noBtn.style.left = Math.min(parseFloat(noBtn.style.left) || pad, maxX) + "px";
+    noBtn.style.top  = Math.min(parseFloat(noBtn.style.top)  || pad, maxY) + "px";
+  });
+
+  pass.focus();
+})();
+</script>
+</body>
+</html>
